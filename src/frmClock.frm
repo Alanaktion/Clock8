@@ -58,6 +58,7 @@ Begin VB.Form frmClock
    End
    Begin VB.Label lblMonthDate 
       Appearance      =   0  'Flat
+      AutoSize        =   -1  'True
       BackColor       =   &H80000005&
       BackStyle       =   0  'Transparent
       Caption         =   "March 26"
@@ -71,14 +72,15 @@ Begin VB.Form frmClock
          Strikethrough   =   0   'False
       EndProperty
       ForeColor       =   &H00FFFFFF&
-      Height          =   735
+      Height          =   600
       Left            =   3600
       TabIndex        =   2
       Top             =   1020
-      Width           =   2175
+      Width           =   1725
    End
    Begin VB.Label lblWeekday 
       Appearance      =   0  'Flat
+      AutoSize        =   -1  'True
       BackColor       =   &H80000005&
       BackStyle       =   0  'Transparent
       Caption         =   "Tuesday"
@@ -92,14 +94,15 @@ Begin VB.Form frmClock
          Strikethrough   =   0   'False
       EndProperty
       ForeColor       =   &H00FFFFFF&
-      Height          =   735
+      Height          =   600
       Left            =   3600
       TabIndex        =   1
       Top             =   450
-      Width           =   2175
+      Width           =   1500
    End
    Begin VB.Label lblTime 
       Appearance      =   0  'Flat
+      AutoSize        =   -1  'True
       BackColor       =   &H80000005&
       BackStyle       =   0  'Transparent
       Caption         =   "11:41"
@@ -113,11 +116,11 @@ Begin VB.Form frmClock
          Strikethrough   =   0   'False
       EndProperty
       ForeColor       =   &H00FFFFFF&
-      Height          =   1695
+      Height          =   1590
       Left            =   600
       TabIndex        =   0
       Top             =   210
-      Width           =   2895
+      Width           =   2730
    End
 End
 Attribute VB_Name = "frmClock"
@@ -183,6 +186,10 @@ Private Sub lblClose_Click()
     
 End Sub
 
+Private Sub lblMonthDate_Click()
+
+End Sub
+
 Private Sub tmrClock_Timer()
 
     ' Update label captions
@@ -193,19 +200,19 @@ Private Sub tmrClock_Timer()
     If Not lblMonthDate.Caption = Format(Now, "mmmm d") Then _
            lblMonthDate.Caption = Format(Now, "mmmm d")
     
-    ' Size everything to fit the current time
-    If Len(RTrim(Left(Format(Now, "h a/p"), 2))) > 1 Then
-        If Not Me.Width = 400 * Screen.TwipsPerPixelX Then
-            lblWeekday.Left = 240
-            lblMonthDate.Left = 240
-            Me.Width = 400 * Screen.TwipsPerPixelX
-        End If
+    ' Position date around time
+    If lblWeekday.Left <> lblTime.Left + lblTime.Width + 18 Then
+        lblWeekday.Left = lblTime.Left + lblTime.Width + 18
+        lblMonthDate.Left = lblWeekday.Left
+    End If
+    
+    ' Size window around date
+    If lblWeekday.Width > lblMonthDate.Width Then
+        If Me.Width <> lblWeekday.Width + lblWeekday.Left + 40 Then _
+            Me.Width = lblWeekday.Width + lblWeekday.Left + 40
     Else
-        If Not Me.Width = 374 * Screen.TwipsPerPixelX Then
-            lblWeekday.Left = 214
-            lblMonthDate.Left = 214
-            Me.Width = 374 * Screen.TwipsPerPixelX
-        End If
+        If Me.Width <> lblMonthDate.Width + lblMonthDate.Left + 40 Then _
+            Me.Width = lblMonthDate.Width + lblMonthDate.Left + 40
     End If
     
 End Sub
